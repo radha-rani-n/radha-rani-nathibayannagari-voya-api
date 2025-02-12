@@ -15,7 +15,16 @@ type tripProps = {
   to_date: string;
   no_of_travellers: number;
 };
-
+const getTrips = async (req: any, res: any) => {
+  try {
+    const trips = await knexapp("trips");
+    res.status(200).json(trips);
+  } catch (err) {
+    console.error(err);
+    res.status(404).send("Error getting trips data:", err);
+  }
+};
+router.get("/", getTrips);
 const addTrip = async (req: { body: tripProps }, res: any) => {
   const {
     trip_name,
