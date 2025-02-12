@@ -26,7 +26,7 @@ interface googleResponse {
 const API_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
 const getResultByQuery = async (query: string) => {
   const { data } = await axios.get<{ data: {} }>(
-    `${API_URL}?query=popular+attractions+in+${query}&key=${API_KEY}`
+    `${API_URL}?query=popular+tourist+attractions+in+${query}&key=${API_KEY}`
   );
 
   return data;
