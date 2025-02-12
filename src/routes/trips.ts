@@ -62,5 +62,20 @@ const addTrip = async (req: { body: tripProps }, res: any) => {
   }
 };
 router.post("/addTrip", addTrip);
-
+const deleteTrip = async (req: any, res: any) => {
+  try {
+    const { tripId } = req.params;
+    const trip = await knexapp("trips").where({ tripId }).first();
+    if (!trip) {
+      return res.status(404).json({ error: `Trip ID ${tripId} not found` });
+    }
+    await knexapp("trips").where({ id: tripId }).del();
+    res.status(204).send();
+  } catch (err: any) {
+    res
+      .status(500)
+      .json({ error: `Error deleting trip ${req.params.id}: ${err.message}` });
+  }
+};
+router.delete("/trips/:tripId", deleteTrip);
 export default router;
