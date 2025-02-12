@@ -3,6 +3,7 @@ import "dotenv/config";
 import cors from "cors";
 import "dotenv/config";
 import places from "./routes/places";
+import trips from "./routes/trips";
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.get("/", (req, res) => {
   res.send("This is home page");
 });
 app.use("/places", places);
+app.use("/trips", trips);
 app.listen(PORT, () => {
   console.log("Server is listening on port " + PORT);
 });
