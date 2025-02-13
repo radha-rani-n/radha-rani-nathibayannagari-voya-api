@@ -112,6 +112,10 @@ const updateTrip = async (req: any, res: any) => {
     const updateTripDetails = await knexapp("trips")
       .where({ id: req.params.tripId })
       .update({ trip_name, place_name, from_date, to_date, no_of_travellers });
+    const updatedTrips = await knexapp("trips").where({
+      id: req.params.tripId,
+    });
+    res.status(200).json(updatedTrips[0]);
   } catch (err: any) {
     res
       .status(500)
