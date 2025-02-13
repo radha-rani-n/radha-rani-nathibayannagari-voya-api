@@ -99,6 +99,21 @@ const updateTrip = async (req: any, res: any) => {
   ) {
     return res.status(400).json({ error: "All fields are required" });
   }
+
+  try {
+    const currentTrip = await knexapp("trips").where({
+      id: req.params.tripId,
+    });
+    if (!currentTrip) {
+      return res
+        .status(404)
+        .json({ error: `Trip Id ${req.params.id} not found` });
+    }
+  } catch (err: any) {
+    res
+      .status(500)
+      .json({ error: `Error updating trip details: ${err.message}` });
+  }
 };
 
 export default router;
