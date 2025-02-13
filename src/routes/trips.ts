@@ -122,5 +122,5 @@ const updateTrip = async (req: any, res: any) => {
       .json({ error: `Error updating trip details: ${err.message}` });
   }
 };
-
+router.put("/:tripId", updateTrip);
 export default router;
