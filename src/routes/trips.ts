@@ -89,6 +89,16 @@ const updateTrip = async (req: any, res: any) => {
     to_date,
     no_of_travellers,
   }: tripProps = req.body;
+
+  if (
+    !trip_name ||
+    !place_name ||
+    !from_date ||
+    !to_date ||
+    !no_of_travellers
+  ) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
 };
 
 export default router;
