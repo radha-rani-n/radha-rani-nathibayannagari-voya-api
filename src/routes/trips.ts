@@ -14,6 +14,7 @@ type tripProps = {
   from_date: string;
   to_date: string;
   no_of_travellers: number;
+  params: object;
 };
 const getTrips = async (req: any, res: any) => {
   try {
@@ -80,4 +81,14 @@ const deleteTrip = async (req: any, res: any) => {
   }
 };
 router.delete("/:tripId", deleteTrip);
+const updateTrip = async (req: any, res: any) => {
+  const {
+    trip_name,
+    place_name,
+    from_date,
+    to_date,
+    no_of_travellers,
+  }: tripProps = req.body;
+};
+
 export default router;
