@@ -26,6 +26,18 @@ const getTrips = async (req: any, res: any) => {
   }
 };
 router.get("/", getTrips);
+const getTrip = async (req: any, res: any) => {
+  try {
+    const trip = await knexapp("trips")
+      .where({ id: req.params.tripId })
+      .first();
+    res.status(200).json(trip);
+  } catch (err) {
+    console.error(err);
+    res.status(404).send("Error getting trip data:", err);
+  }
+};
+router.get("/:tripId", getTrip);
 const addTrip = async (req: { body: tripProps }, res: any) => {
   const {
     trip_name,
@@ -123,4 +135,5 @@ const updateTrip = async (req: any, res: any) => {
   }
 };
 router.put("/:tripId", updateTrip);
+
 export default router;
