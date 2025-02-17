@@ -2,7 +2,7 @@ import express, { Router } from "express";
 import "dotenv/config";
 import cors from "cors";
 import "dotenv/config";
-import places from "./routes/places";
+import places from "./routes/places2";
 import trips from "./routes/trips";
 
 const app = express();
