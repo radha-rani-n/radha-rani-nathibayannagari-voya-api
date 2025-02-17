@@ -137,4 +137,24 @@ const updateTrip = async (req: any, res: any) => {
 };
 router.put("/:tripId", updateTrip);
 
+const patchTrip = async (req, res) => {
+  try {
+    const { tripId } = req.params;
+    const currentTrip = await knexapp("trips").where({ id: tripId }).first();
+
+    if (!currentTrip) {
+      return res
+        .status(404)
+        .json({ error: `Trip Id ${req.params.id} not found` });
+    }
+
+    await knexapp("trips").where({ id: tripId }).update({ trip_place });
+    res.status(204).send();
+  } catch (err: any) {
+    res
+      .status(500)
+      .json({ error: `Error updating trip details: ${err.message}` });
+  }
+};
+router.patch("/:tripId", patchTrip);
 export default router;
