@@ -9,6 +9,7 @@ interface SearchQueryParams {
   q: string;
   limit: number;
   token: string;
+  input: string;
 }
 
 interface googleResponse {
@@ -24,6 +25,31 @@ interface googleResponse {
 }
 
 const API_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
+
+const API_AUTO_COMPLETE_URL =
+  "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+const getAutoCompleteResults = async (query: string) => {
+  const { data } = await axios.get<{ predictions: [] }>(
+    `${API_AUTO_COMPLETE_URL}?input=${query}&types=geocode&key=${API_KEY}`
+  );
+
+  return data.predictions;
+};
+
+router
+  .route("/auto-complete")
+  .get(async (req: Request<{}, {}, {}, SearchQueryParams>, res) => {
+    try {
+      const input = req.query.input;
+      const result = await getAutoCompleteResults(input);
+      console.log(result);
+      res.json(result);
+    } catch (error) {
+      console.error("Error reading the places file", error);
+      res.status(500).json({ message: "Server error reading places data" });
+    }
+  });
+
 const getResultByQuery = async (query: string) => {
   const { data } = await axios.get<{ data: {} }>(
     `${API_URL}?query=popular+tourist+attractions+in+${query}&key=${API_KEY}`
