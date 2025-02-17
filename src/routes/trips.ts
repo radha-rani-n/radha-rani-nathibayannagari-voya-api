@@ -93,6 +93,7 @@ const deleteTrip = async (req: any, res: any) => {
   }
 };
 router.delete("/:tripId", deleteTrip);
+
 const updateTrip = async (req: any, res: any) => {
   const {
     trip_name,
