@@ -30,7 +30,7 @@ const API_AUTO_COMPLETE_URL =
   "https://maps.googleapis.com/maps/api/place/autocomplete/json";
 const getAutoCompleteResults = async (query: string) => {
   const { data } = await axios.get<{ predictions: [] }>(
-    `${API_AUTO_COMPLETE_URL}?input=${query}&types=geocode&key=${API_KEY}`
+    `${API_AUTO_COMPLETE_URL}?input=${query}&types=%28regions%29&key=${API_KEY}`
   );
 
   return data.predictions;

@@ -80,4 +80,5 @@ const deleteTrip = async (req: any, res: any) => {
   }
 };
 router.delete("/:tripId", deleteTrip);
+
 export default router;
