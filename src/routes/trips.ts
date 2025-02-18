@@ -3,7 +3,7 @@ import express from "express";
 
 import knex from "knex";
 import config from "../client/knexfile";
-import { v4 as uuidv4 } from "uuid";
+
 const router = express.Router();
 
 const knexapp = knex(config);

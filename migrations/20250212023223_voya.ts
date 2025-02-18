@@ -27,7 +27,6 @@ export function up(knex: any): any {
         .defaultTo(knex.raw("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"));
     })
     .createTable("trips_places", (table: any) => {
-      table.increments("id").primary();
       table
         .integer("trip_id")
         .unsigned()
@@ -39,6 +38,8 @@ export function up(knex: any): any {
       table
         .timestamp("updated_at")
         .defaultTo(knex.raw("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"));
+
+      table.primary(["trip_id", "place_id"]);
     });
 }
 
