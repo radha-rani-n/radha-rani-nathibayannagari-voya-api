@@ -71,4 +71,6 @@ router
       res.status(500).json({ message: "Server error reading places data" });
     }
   });
+
+const postPlaces = async () => {};
 export default router;

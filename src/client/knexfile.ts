@@ -1,5 +1,8 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+
 import knex from "knex";
+
+dotenv.config({ path: "../../.env" });
 
 const config: knex.Knex.Config = {
   client: "mysql2",
@@ -9,6 +12,12 @@ const config: knex.Knex.Config = {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
   },
+  migrations: {
+    directory: "../../migrations",
+  },
+  seeds: {
+    directory: "../../seeds",
+  },
 };
 
-export { config };
+export default config;

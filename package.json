@@ -6,7 +6,12 @@
     "compile": "npx tsc",
     "serve": "npm run compile &&  node dist/index.js",
     "dev": "npx tsc-watch --onSuccess 'node ./dist/index.js'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "knex:migrate:make": "knex --knexfile src/client/knexfile.ts migrate:make -x ts",
+    "knex:migrate:latest": "knex --knexfile src/client/knexfile.ts migrate:latest",
+    "knex:migrate:rollback": "knex --knexfile src/client/knexfile.ts migrate:rollback",
+    "knex:seed:run": "knex --knexfile src/client/knexfile.ts seed:run",
+    "knex:seed:make": "knex --knexfile src/client/knexfile.ts seed:make"
   },
   "author": "",
   "license": "ISC",
