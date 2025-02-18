@@ -31,7 +31,20 @@ const getTrip = async (req: any, res: any) => {
     const trip = await knexapp("trips")
       .where({ trip_id: req.params.tripId })
       .first();
-    res.status(200).json(trip);
+    const trip_places = await knexapp("trips_places").where({
+      trip_id: req.params.tripId,
+    });
+    const places = [];
+    for (let trip_place of trip_places) {
+      const place = await knexapp("places")
+        .where({ place_id: trip_place.place_id })
+        .first();
+      places.push(place);
+    }
+    res.status(200).json({
+      trip,
+      places,
+    });
   } catch (err) {
     console.error(err);
     res.status(404).send("Error getting trip data:", err);
@@ -115,7 +128,7 @@ const updateTrip = async (req: any, res: any) => {
 
   try {
     const currentTrip = await knexapp("trips").where({
-      id: req.params.tripId,
+      trip_id: req.params.tripId,
     });
     if (!currentTrip) {
       return res

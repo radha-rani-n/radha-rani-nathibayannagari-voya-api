@@ -30,9 +30,14 @@ export function up(knex: any): any {
       table
         .integer("trip_id")
         .unsigned()
-        .references("trip_id")
-        .inTable("trips");
-      table.string("place_id").references("place_id").inTable("places");
+        .references("trips.trip_id")
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
+      table
+        .string("place_id")
+        .references("places.place_id")
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
 
       table.timestamp("created_at").defaultTo(knex.fn.now());
       table
