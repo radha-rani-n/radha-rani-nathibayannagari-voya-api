@@ -2,10 +2,14 @@ import express, { Router } from "express";
 import "dotenv/config";
 import cors from "cors";
 import { clerkMiddleware } from "@clerk/express";
-import { clerkClient, requireAuth, getAuth } from "@clerk/express";
-import "dotenv/config";
+import { requireAuth, getAuth } from "@clerk/express";
+import dotenv from "dotenv";
 import places from "./routes/places";
 import trips from "./routes/trips";
+
+dotenv.config({
+  path: "../.env",
+});
 
 const app = express();
 
@@ -13,15 +17,10 @@ const PORT = process.env.PORT;
 app.use(
   clerkMiddleware({
     authorizedParties: ["http://localhost:5173"],
+    publishableKey: process.env.CLERK_PUBLISHABLE_KEY,
+    secretKey: process.env.CLERK_SECRET_KEY,
   })
 );
-// app.get("/protected", requireAuth(), async (req, res) => {
-//   const { userId } = getAuth(req);
-
-//   const user = await clerkClient.users.getUser(userId);
-
-//   return res.json({ user });
-// });
 
 app.use(cors());
 app.use(express.json());
@@ -40,7 +39,11 @@ app.use(
 );
 app.use(
   "/trips",
-  // requireAuth(),
+  // requireAuth({
+  //   authorizedParties: ["http://localhost:5173"],
+  //   publishableKey: process.env.CLERK_PUBLISHABLE_KEY,
+  //   secretKey: process.env.CLERK_SECRET_KEY,
+  // }),
   trips
 );
 app.listen(PORT, () => {

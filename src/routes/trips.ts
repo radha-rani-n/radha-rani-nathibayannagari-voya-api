@@ -1,6 +1,5 @@
-import { error } from "console";
 import express from "express";
-
+import { clerkClient, requireAuth, getAuth } from "@clerk/express";
 import knex from "knex";
 import config from "../client/knexfile";
 
@@ -17,8 +16,11 @@ type tripProps = {
   params: object;
 };
 const getTrips = async (req: any, res: any) => {
+  const { userId } = getAuth(req);
   try {
-    const trips = await knexapp("trips");
+    const trips = await knexapp("trips").where({
+      user_id: userId,
+    });
     res.status(200).json(trips);
   } catch (err) {
     console.error(err);
@@ -27,12 +29,14 @@ const getTrips = async (req: any, res: any) => {
 };
 router.get("/", getTrips);
 const getTrip = async (req: any, res: any) => {
+  const { userId } = getAuth(req);
   try {
     const trip = await knexapp("trips")
-      .where({ trip_id: req.params.tripId })
+      .where({ trip_id: req.params.tripId, user_id: userId })
       .first();
     const trip_places = await knexapp("trips_places").where({
       trip_id: req.params.tripId,
+      user_id: userId,
     });
     const places = [];
     for (let trip_place of trip_places) {
@@ -51,7 +55,8 @@ const getTrip = async (req: any, res: any) => {
   }
 };
 router.get("/:tripId", getTrip);
-const addTrip = async (req: { body: tripProps }, res: any) => {
+const addTrip = async (req: any, res: any) => {
+  const { userId } = getAuth(req);
   const {
     trip_name,
     place_name,
@@ -77,10 +82,12 @@ const addTrip = async (req: { body: tripProps }, res: any) => {
       from_date,
       to_date,
       no_of_travellers,
+      user_id: userId,
     });
     const newTripId = addNewTrip[0];
     const newTripData = await knexapp("trips").where({
       trip_id: newTripId,
+      user_id: userId,
     });
     res.status(200).json(newTripData);
   } catch (err: any) {
@@ -88,16 +95,20 @@ const addTrip = async (req: { body: tripProps }, res: any) => {
   }
 };
 router.post("/addTrip", addTrip);
+
 const deleteTrip = async (req: any, res: any) => {
+  const { userId } = getAuth(req);
   try {
     const { tripId } = req.params;
 
-    const trip = await knexapp("trips").where({ trip_id: tripId }).first();
+    const trip = await knexapp("trips")
+      .where({ trip_id: tripId, user_id: userId })
+      .first();
 
     if (!trip) {
       return res.status(404).json({ error: `Trip ID ${tripId} not found` });
     }
-    await knexapp("trips").where({ trip_id: tripId }).del();
+    await knexapp("trips").where({ trip_id: tripId, user_id: userId }).del();
     res.status(204).send();
   } catch (err: any) {
     res.status(500).json({
@@ -108,6 +119,7 @@ const deleteTrip = async (req: any, res: any) => {
 router.delete("/:tripId", deleteTrip);
 
 const updateTrip = async (req: any, res: any) => {
+  const { userId } = getAuth(req);
   const {
     trip_name,
     place_name,
@@ -129,17 +141,19 @@ const updateTrip = async (req: any, res: any) => {
   try {
     const currentTrip = await knexapp("trips").where({
       trip_id: req.params.tripId,
+      user_id: userId,
     });
     if (!currentTrip) {
       return res
         .status(404)
         .json({ error: `Trip Id ${req.params.trip_id} not found` });
     }
-    const updateTripDetails = await knexapp("trips")
-      .where({ trip_id: req.params.tripId })
+    await knexapp("trips")
+      .where({ trip_id: req.params.tripId, user_id: userId })
       .update({ trip_name, place_name, from_date, to_date, no_of_travellers });
     const updatedTrips = await knexapp("trips").where({
       trip_id: req.params.tripId,
+      user_id: userId,
     });
     res.status(200).json(updatedTrips[0]);
   } catch (err: any) {
@@ -150,24 +164,4 @@ const updateTrip = async (req: any, res: any) => {
 };
 router.put("/:tripId", updateTrip);
 
-// const patchTrip = async (req, res) => {
-//   try {
-//     const { tripId } = req.params;
-//     const currentTrip = await knexapp("trips").where({ id: tripId }).first();
-
-//     if (!currentTrip) {
-//       return res
-//         .status(404)
-//         .json({ error: `Trip Id ${req.params.id} not found` });
-//     }
-
-//     await knexapp("trips").where({ id: tripId }).update({ trip_place });
-//     res.status(204).send();
-//   } catch (err: any) {
-//     res
-//       .status(500)
-//       .json({ error: `Error updating trip details: ${err.message}` });
-//   }
-// };
-// router.patch("/:tripId", patchTrip);
 export default router;

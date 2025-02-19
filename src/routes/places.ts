@@ -5,7 +5,7 @@ const router = express.Router();
 import axios from "axios";
 import knex from "knex";
 import config from "../client/knexfile";
-import { v4 as uuidv4 } from "uuid";
+import { getAuth } from "@clerk/express";
 const API_KEY = process.env.API_KEY;
 const knexapp = knex(config);
 interface SearchQueryParams {
@@ -39,19 +39,16 @@ const getAutoCompleteResults = async (query: string) => {
   return data.predictions;
 };
 
-router
-  .route("/auto-complete")
-  .get(async (req: Request<{}, {}, {}, SearchQueryParams>, res) => {
-    try {
-      const input = req.query.input;
-      const result = await getAutoCompleteResults(input);
-      console.log(result);
-      res.json(result);
-    } catch (error) {
-      console.error("Error reading the places file", error);
-      res.status(500).json({ message: "Server error reading places data" });
-    }
-  });
+router.route("/auto-complete").get(async (req: any, res) => {
+  try {
+    const input = req.query.input;
+    const result = await getAutoCompleteResults(input);
+    res.json(result);
+  } catch (error) {
+    console.error("Error reading the places file", error);
+    res.status(500).json({ message: "Server error reading places data" });
+  }
+});
 
 const getResultByQuery = async (query: string) => {
   const { data } = await axios.get<{ data: {} }>(
@@ -61,21 +58,19 @@ const getResultByQuery = async (query: string) => {
   return data;
 };
 
-router
-  .route("/search")
-  .get(async (req: Request<{}, {}, {}, SearchQueryParams>, res) => {
-    try {
-      const { q, limit, token } = req.query;
-      const result = await getResultByQuery(q);
-      console.log(result);
-      res.json(result);
-    } catch (error) {
-      console.error("Error reading the places file", error);
-      res.status(500).json({ message: "Server error reading places data" });
-    }
-  });
+router.route("/search").get(async (req: any, res) => {
+  try {
+    const { q, limit, token } = req.query;
+    const result = await getResultByQuery(q);
+    res.json(result);
+  } catch (error) {
+    console.error("Error reading the places file", error);
+    res.status(500).json({ message: "Server error reading places data" });
+  }
+});
 
 const addNewPlace = async (req: any, res: any) => {
+  const { userId } = getAuth(req);
   const { place_id, place_name, photo_reference, trip_id } = req.body;
   if (!place_id || !place_name || !photo_reference || !trip_id) {
     return res.json(400).json({ error: "All fields are required" });
@@ -97,6 +92,7 @@ const addNewPlace = async (req: any, res: any) => {
         .insert({
           trip_id,
           place_id,
+          user_id: userId,
         })
         .transacting(trx);
     });

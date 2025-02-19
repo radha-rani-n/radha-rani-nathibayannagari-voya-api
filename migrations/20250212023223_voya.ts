@@ -15,6 +15,7 @@ export function up(knex: any): any {
       table
         .timestamp("updated_at")
         .defaultTo(knex.raw("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"));
+      table.string("user_id").notNullable();
     })
     .createTable("places", (table: any) => {
       table.string("place_id").primary();
@@ -38,6 +39,7 @@ export function up(knex: any): any {
         .references("places.place_id")
         .onUpdate("CASCADE")
         .onDelete("CASCADE");
+      table.string("user_id");
 
       table.timestamp("created_at").defaultTo(knex.fn.now());
       table
