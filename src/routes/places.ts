@@ -27,16 +27,25 @@ interface googleResponse {
   }[];
 }
 
-const API_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
+const API_URL = "https://places.googleapis.com/v1/places:searchText";
 
 const API_AUTO_COMPLETE_URL =
-  "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+  "https://places.googleapis.com/v1/places:autocomplete";
 const getAutoCompleteResults = async (query: string) => {
-  const { data } = await axios.get<{ predictions: [] }>(
-    `${API_AUTO_COMPLETE_URL}?input=${query}&types=%28regions%29&key=${API_KEY}`
+  const { data } = await axios.post<{ suggestions: [] }>(
+    API_AUTO_COMPLETE_URL,
+    { input: query, includedPrimaryTypes: "(regions)" },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": API_KEY,
+      },
+    }
   );
 
-  return data.predictions;
+  console.log(data);
+
+  return data.suggestions;
 };
 
 router.route("/auto-complete").get(async (req: any, res) => {
@@ -51,8 +60,19 @@ router.route("/auto-complete").get(async (req: any, res) => {
 });
 
 const getResultByQuery = async (query: string) => {
-  const { data } = await axios.get<{ data: {} }>(
-    `${API_URL}?query=popular+tourist+attractions+in+${query}&key=${API_KEY}`
+  const { data } = await axios.post<{ data: {} }>(
+    API_URL,
+    {
+      textQuery: `Tourist attractions in ${query}`,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": API_KEY,
+        "X-Goog-FieldMask":
+          "places.id,places.displayName,places.formattedAddress,places.photos,places.types,places.primaryType,places.location",
+      },
+    }
   );
 
   return data;
@@ -71,8 +91,22 @@ router.route("/search").get(async (req: any, res) => {
 
 const addNewPlace = async (req: any, res: any) => {
   const { userId } = getAuth(req);
-  const { place_id, place_name, photo_reference, trip_id } = req.body;
-  if (!place_id || !place_name || !photo_reference || !trip_id) {
+  const {
+    place_id,
+    place_name,
+    photo_reference,
+    latitude,
+    longitude,
+    trip_id,
+  } = req.body;
+  if (
+    !place_id ||
+    !place_name ||
+    !photo_reference ||
+    !trip_id ||
+    !latitude ||
+    !longitude
+  ) {
     return res.json(400).json({ error: "All fields are required" });
   }
 
@@ -83,6 +117,8 @@ const addNewPlace = async (req: any, res: any) => {
           place_id,
           place_name,
           photo_reference,
+          latitude,
+          longitude,
         })
         .onConflict(["place_id", "place_name", "photo_reference"])
         .ignore()

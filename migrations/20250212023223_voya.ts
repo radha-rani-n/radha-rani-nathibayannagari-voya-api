@@ -20,6 +20,8 @@ export function up(knex: any): any {
     .createTable("places", (table: any) => {
       table.string("place_id").primary();
       table.string("place_name").notNullable();
+      table.string("latitude").notNullable();
+      table.string("longitude").notNullable();
       table.string("photo_reference");
 
       table.timestamp("created_at").defaultTo(knex.fn.now());
