@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
 import {
+  deletePlace,
   getAutoCompleteResults,
   getResultByQuery,
   updateTrips,
@@ -60,5 +61,5 @@ router.get("/search", getResultByQuery);
 //   }
 // };
 router.post("/updateTrips", updateTrips);
-
+router.delete("/:tripId", deletePlace);
 export default router;

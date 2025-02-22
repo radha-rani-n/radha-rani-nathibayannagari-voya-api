@@ -140,4 +140,26 @@ const updateTrips = async (req: any, res: any) => {
   }
 };
 
-export { getAutoCompleteResults, getResultByQuery, updateTrips };
+const deletePlace = async (req: any, res: any) => {
+  // const { userId } = getAuth(req);
+  try {
+    const { tripId } = req.params;
+    const { placeId } = req.query;
+    const tripPlace = await knexapp("trips_places")
+      .where({ trip_id: tripId, place_id: placeId })
+      .first();
+    if (!tripPlace) {
+      return res.status(404).json({ error: `Trip ID ${tripId} not found` });
+    }
+    await knexapp("trips_places")
+      .where({ trip_id: tripId, place_id: placeId })
+      .del();
+    res.status(204).send();
+  } catch (err: any) {
+    res.status(500).json({
+      error: `Error deleting place from trip ${req.params.tripId}: ${err.message}`,
+    });
+  }
+};
+
+export { getAutoCompleteResults, getResultByQuery, updateTrips, deletePlace };
