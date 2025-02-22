@@ -6,12 +6,18 @@ import config from "src/client/knexfile";
 
 const API_URL = "http://api.weatherapi.com/v1";
 const API_KEY = process.env.WEATHER_API_KEY;
+
+interface weatherResponse {
+  current: {
+    temp_c: number;
+  };
+}
 const getWeatherData = async (query: string) => {
-  const { data } = await axios.get<{ data: {} }>(
+  const { data } = await axios.get<weatherResponse>(
     `${API_URL}/current.json?q=${query}&key=${API_KEY}`
   );
 
-  return data;
+  return data.current.temp_c;
 };
 
 const getWeather = async (req: any, res: any) => {
