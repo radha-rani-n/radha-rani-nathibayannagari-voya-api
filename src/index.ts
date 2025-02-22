@@ -6,6 +6,7 @@ import { requireAuth, getAuth } from "@clerk/express";
 import dotenv from "dotenv";
 import places from "./routes/places";
 import trips from "./routes/trips";
+import openAI from "./routes/open-ai";
 import { rateLimit } from "express-rate-limit";
 
 dotenv.config({
@@ -61,6 +62,15 @@ app.use(
   //   secretKey: process.env.CLERK_SECRET_KEY,
   // }),
   trips
+);
+app.use(
+  "/ai",
+  // requireAuth({
+  //   authorizedParties: ["http://localhost:5173"],
+  //   publishableKey: process.env.CLERK_PUBLISHABLE_KEY,
+  //   secretKey: process.env.CLERK_SECRET_KEY,
+  // }),
+  openAI
 );
 app.listen(PORT, () => {
   console.log("Server is listening on port " + PORT);
