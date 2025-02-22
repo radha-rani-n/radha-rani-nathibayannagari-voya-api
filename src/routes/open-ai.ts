@@ -7,7 +7,7 @@ const router = express.Router();
 const knexapp = knex(config);
 
 const openai = new OpenAI({
-  apiKey: process.env["OPENAI_API_KEY"], // This is the default and can be omitted
+  apiKey: process.env["OPENAI_API_KEY"],
 });
 
 const getPlaceSummary = async (placeName: string) => {
@@ -21,7 +21,7 @@ const getPlaceSummary = async (placeName: string) => {
       },
       {
         role: "user",
-        content: `Give me a brief summary of following place (in 3-4 sentences): ${placeName}`,
+        content: `Give me a brief summary of following place (in 1-2 sentence): ${placeName}`,
       },
     ],
     store: true,
