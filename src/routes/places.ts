@@ -31,6 +31,7 @@ const API_URL = "https://places.googleapis.com/v1/places:searchText";
 
 const API_AUTO_COMPLETE_URL =
   "https://places.googleapis.com/v1/places:autocomplete";
+
 const getAutoCompleteResults = async (query: string) => {
   const { data } = await axios.post<{ suggestions: [] }>(
     API_AUTO_COMPLETE_URL,
@@ -89,7 +90,7 @@ router.route("/search").get(async (req: any, res) => {
   }
 });
 
-const addNewPlace = async (req: any, res: any) => {
+const updateTrips = async (req: any, res: any) => {
   const { userId } = getAuth(req);
   const {
     place_id,
@@ -97,13 +98,13 @@ const addNewPlace = async (req: any, res: any) => {
     photo_reference,
     latitude,
     longitude,
-    trip_id,
+    trip_ids,
   } = req.body;
   if (
     !place_id ||
     !place_name ||
     !photo_reference ||
-    !trip_id ||
+    !trip_ids ||
     !latitude ||
     !longitude
   ) {
@@ -125,11 +126,13 @@ const addNewPlace = async (req: any, res: any) => {
         .transacting(trx);
 
       await knexapp("trips_places")
-        .insert({
-          trip_id,
-          place_id,
-          user_id: userId,
-        })
+        .insert(
+          trip_ids.map((ele: string[]) => {
+            return { trip_id: ele, place_id, user_id: userId };
+          })
+        )
+        .onConflict(["trip_id", "place_id"])
+        .ignore()
         .transacting(trx);
     });
     res.status(200).send("success");
@@ -137,5 +140,6 @@ const addNewPlace = async (req: any, res: any) => {
     res.status(500).json({ error: `Error adding place data ${err.message}` });
   }
 };
-router.post("/addPlace", addNewPlace);
+router.post("/updateTrips", updateTrips);
+
 export default router;
