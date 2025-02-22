@@ -6,7 +6,7 @@ import { requireAuth, getAuth } from "@clerk/express";
 import dotenv from "dotenv";
 import places from "./routes/places";
 import trips from "./routes/trips";
-import openAI from "./routes/open-ai";
+import openAI from "./routes/openAi";
 import { rateLimit } from "express-rate-limit";
 import weather from "./routes/weather";
 

@@ -55,6 +55,4 @@ const getSummaryAPI = async (req: any, res: any) => {
   }
 };
 
-router.get("/getPlaceSummary", getSummaryAPI);
-
-export default router;
+export { getSummaryAPI };
