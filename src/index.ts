@@ -8,6 +8,7 @@ import places from "./routes/places";
 import trips from "./routes/trips";
 import openAI from "./routes/open-ai";
 import { rateLimit } from "express-rate-limit";
+import weather from "./routes/weather";
 
 dotenv.config({
   path: "../.env",
@@ -72,6 +73,7 @@ app.use(
   // }),
   openAI
 );
+app.use("/place", weather);
 app.listen(PORT, () => {
   console.log("Server is listening on port " + PORT);
 });
