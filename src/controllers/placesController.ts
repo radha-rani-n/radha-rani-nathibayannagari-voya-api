@@ -1,5 +1,3 @@
-import fs from "fs";
-import type { Request, Response } from "express";
 import express from "express";
 const router = express.Router();
 import axios from "axios";
@@ -141,7 +139,6 @@ const updateTrips = async (req: any, res: any) => {
 };
 
 const deletePlace = async (req: any, res: any) => {
-  // const { userId } = getAuth(req);
   try {
     const { tripId } = req.params;
     const { placeId } = req.query;

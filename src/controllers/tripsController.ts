@@ -1,5 +1,5 @@
 import express from "express";
-import { clerkClient, requireAuth, getAuth } from "@clerk/express";
+import { getAuth } from "@clerk/express";
 import knex from "knex";
 import config from "../client/knexfile";
 

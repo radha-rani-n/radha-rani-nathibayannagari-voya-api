@@ -21,7 +21,7 @@ const getPlaceSummary = async (placeName: string) => {
       },
       {
         role: "user",
-        content: `Give me a brief summary of following place (in 1-2 sentence): ${placeName}`,
+        content: `Give me a brief summary of following place (in 1 sentence): ${placeName}`,
       },
     ],
     store: true,
