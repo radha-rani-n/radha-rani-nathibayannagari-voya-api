@@ -159,4 +159,34 @@ const deletePlace = async (req: any, res: any) => {
   }
 };
 
+const getFoodPlacesByQuery = async (query: string) => {
+  const { data } = await axios.post<{ data: {} }>(
+    API_URL,
+    {
+      textQuery: `Popular Food Places in ${query}`,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": API_KEY,
+        "X-Goog-FieldMask":
+          "places.id,places.displayName,places.formattedAddress,places.photos,places.types,places.primaryType,places.location",
+      },
+    }
+  );
+
+  return data;
+};
+
+const getFoodPlaces = async (req: any, res: any) => {
+  try {
+    const { q, limit, token } = req.query;
+    const result = await getFoodPlacesByQuery(q);
+    res.json(result);
+  } catch (error) {
+    console.error("Error reading the places file", error);
+    res.status(500).json({ message: "Server error reading places data" });
+  }
+};
+
 export { getAutoCompleteResults, getResultByQuery, updateTrips, deletePlace };
