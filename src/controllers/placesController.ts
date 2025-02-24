@@ -189,4 +189,10 @@ const getFoodPlaces = async (req: any, res: any) => {
   }
 };
 
-export { getAutoCompleteResults, getResultByQuery, updateTrips, deletePlace };
+export {
+  getAutoCompleteResults,
+  getResultByQuery,
+  updateTrips,
+  deletePlace,
+  getFoodPlaces,
+};
