@@ -20,5 +20,17 @@ const config: knex.Knex.Config = {
     directory: "../../seeds",
   },
 };
+const supabaseConfig: knex.Knex.Config = {
+  client: "pg",
+  connection: {
+    connectionString: process.env.PG_SUPABASE_CONNECTION_STRING,
+  },
+  migrations: {
+    directory: "../../migrations",
+  },
+  seeds: {
+    directory: "../../seeds",
+  },
+};
 
-export default config;
+export default supabaseConfig;
