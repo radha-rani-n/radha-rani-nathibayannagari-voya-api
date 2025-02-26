@@ -75,15 +75,18 @@ const addTrip = async (req: any, res: any) => {
   }
 
   try {
-    const addNewTrip = await knexapp("trips").insert({
-      trip_name,
-      place_name,
-      from_date,
-      to_date,
-      no_of_travellers,
-      user_id: userId,
-    });
-    const newTripId = addNewTrip[0];
+    const addNewTrip = await knexapp("trips").insert(
+      {
+        trip_name,
+        place_name,
+        from_date,
+        to_date,
+        no_of_travellers,
+        user_id: userId,
+      },
+      "trip_id"
+    );
+    const newTripId = addNewTrip[0]["trip_id"];
     const newTripData = await knexapp("trips").where({
       trip_id: newTripId,
       user_id: userId,

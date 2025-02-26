@@ -11,10 +11,7 @@ export function up(knex: any): any {
       table.date("from_date").notNullable();
       table.date("to_date").notNullable();
       table.string("no_of_travellers").notNullable();
-      table.timestamp("created_at").defaultTo(knex.fn.now());
-      table
-        .timestamp("updated_at")
-        .defaultTo(knex.raw("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"));
+      table.timestamps(true, true);
       table.string("user_id").notNullable();
     })
     .createTable("places", (table: any) => {
@@ -24,10 +21,7 @@ export function up(knex: any): any {
       table.string("longitude").notNullable();
       table.string("photo_reference");
 
-      table.timestamp("created_at").defaultTo(knex.fn.now());
-      table
-        .timestamp("updated_at")
-        .defaultTo(knex.raw("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"));
+      table.timestamps(true, true);
     })
     .createTable("trips_places", (table: any) => {
       table
@@ -43,10 +37,7 @@ export function up(knex: any): any {
         .onDelete("CASCADE");
       table.string("user_id");
 
-      table.timestamp("created_at").defaultTo(knex.fn.now());
-      table
-        .timestamp("updated_at")
-        .defaultTo(knex.raw("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"));
+      table.timestamps(true, true);
 
       table.primary(["trip_id", "place_id"]);
     });
