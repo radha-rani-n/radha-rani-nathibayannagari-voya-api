@@ -14,7 +14,6 @@ const getWeatherData = async (query: string) => {
   const { data } = await axios.get<weatherResponse>(
     `${API_URL}/current.json?q=${query}&key=${API_KEY}`
   );
-
   return data.current.temp_c;
 };
 

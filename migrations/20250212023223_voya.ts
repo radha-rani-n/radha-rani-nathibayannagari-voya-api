@@ -19,8 +19,8 @@ export function up(knex: any): any {
       table.string("place_name").notNullable();
       table.string("latitude").notNullable();
       table.string("longitude").notNullable();
-      table.string("photo_reference");
-
+      table.text("photo_reference");
+      table.text("unsplash_image_url");
       table.timestamps(true, true);
     })
     .createTable("trips_places", (table: any) => {
@@ -52,5 +52,5 @@ export function down(knex: any): any {
   return knex.schema
     .dropTable("trips_places")
     .dropTable("trips")
-    .drop("places");
+    .dropTable("places");
 }

@@ -1,8 +1,4 @@
-import dotenv from "dotenv";
-
 import knex from "knex";
-
-dotenv.config({ path: "../../.env" });
 
 const config: knex.Knex.Config = {
   client: "pg",
@@ -30,6 +26,13 @@ const supabaseConfig: knex.Knex.Config = {
   },
   seeds: {
     directory: "../../seeds",
+  },
+  pool: {
+    min: 0,
+    max: 40,
+    acquireTimeoutMillis: 60 * 1000,
+    idleTimeoutMillis: 55000,
+    propagateCreateError: false,
   },
 };
 

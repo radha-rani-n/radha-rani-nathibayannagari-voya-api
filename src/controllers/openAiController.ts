@@ -1,9 +1,7 @@
 import OpenAI from "openai";
-import express from "express";
 import knex from "knex";
 import config from "../client/knexfile";
 
-const router = express.Router();
 const knexapp = knex(config);
 
 const openai = new OpenAI({

@@ -90,6 +90,7 @@ const updateTrips = async (req: any, res: any) => {
     place_id,
     place_name,
     photo_reference,
+    unsplash_image_url,
     latitude,
     longitude,
     trip_ids,
@@ -98,6 +99,7 @@ const updateTrips = async (req: any, res: any) => {
     !place_id ||
     !place_name ||
     !photo_reference ||
+    !unsplash_image_url ||
     !trip_ids ||
     !latitude ||
     !longitude
@@ -112,6 +114,7 @@ const updateTrips = async (req: any, res: any) => {
           place_id,
           place_name,
           photo_reference,
+          unsplash_image_url,
           latitude,
           longitude,
         })
