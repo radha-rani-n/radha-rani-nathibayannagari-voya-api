@@ -1,0 +1,23 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci --cache .npm --prefer-offline
+    build:
+      commands:
+        - echo "CLERK_PUBLISHABLE_KEY=$CLERK_PUBLISHABLE_KEY" >> compute/.env
+        - echo "CLERK_SECRET_KEY=$CLERK_SECRET_KEY" >> compute/.env
+        - echo "CORS_ORIGIN=$CORS_ORIGIN" >> compute/.env
+        - echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> compute/.env
+        - echo "PG_SUPABASE_CONNECTION_STRING=$PG_SUPABASE_CONNECTION_STRING" >> compute/.env
+        - echo "PORT=$PORT" >> compute/.env
+        - echo "WEATHER_API_KEY=$WEATHER_API_KEY" >> compute/.env
+        - npm run build
+  artifacts:
+    baseDirectory: dist
+    files:
+      - "**/*"
+  cache:
+    paths:
+      - .npm/**/*
