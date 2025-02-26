@@ -41,9 +41,6 @@ const getAutoCompleteApiResults = async (query: string) => {
       },
     }
   );
-
-  console.log(data);
-
   return data.suggestions;
 };
 
@@ -118,7 +115,7 @@ const updateTrips = async (req: any, res: any) => {
           latitude,
           longitude,
         })
-        .onConflict(["place_id", "place_name", "photo_reference"])
+        .onConflict(["place_id"])
         .ignore()
         .transacting(trx);
 
@@ -170,7 +167,7 @@ const getFoodPlacesByQuery = async (query: string) => {
         "Content-Type": "application/json",
         "X-Goog-Api-Key": API_KEY,
         "X-Goog-FieldMask":
-          "places.id,places.displayName,places.formattedAddress,places.photos,places.types,places.primaryType,places.location",
+          "places.id,places.displayName,places.formattedAddress,places.photos,places.types,places.primaryType,places.location,places.rating,places.reviews,places.googleMapsLinks",
       },
     }
   );

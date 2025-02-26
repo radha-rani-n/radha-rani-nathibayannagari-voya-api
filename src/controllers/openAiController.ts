@@ -38,12 +38,10 @@ const getSummaryAPI = async (req: any, res: any) => {
     .first();
 
   if (trip) {
-    console.log("returning from database...");
     return res.status(200).json({
       summary: trip.location_summary,
     });
   } else {
-    console.log("Making API call...");
     const message = await getPlaceSummary(placeName);
     await knexapp("location_summaries").insert({
       location_name: placeName.toLocaleLowerCase(),
