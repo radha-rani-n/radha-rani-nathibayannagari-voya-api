@@ -1,13 +1,13 @@
 import express, { Router } from "express";
 
-import config from "./client/knexfile";
-import knex from "knex";
-const knexapp = knex(config);
-
 import dotenv from "dotenv";
 dotenv.config({
   path: ".env",
 });
+
+import config from "./client/knexfile";
+import knex from "knex";
+const knexapp = knex(config);
 
 import cors from "cors";
 import { clerkMiddleware, requireAuth } from "@clerk/express";
@@ -35,11 +35,7 @@ if (process.env.FRONTEND_URL) {
 if (process.env.ENVIRONMENT && process.env.ENVIRONMENT === "LOCAL") {
   allowed_origins.push(process.env.LOCAL_FRONTEND_URL ?? "");
 }
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+app.use(cors());
 
 app.use(
   clerkMiddleware({

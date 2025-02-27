@@ -31,8 +31,8 @@ const supabaseConfig: knex.Knex.Config = {
     min: 0,
     max: 40,
     acquireTimeoutMillis: 60 * 1000,
-    idleTimeoutMillis: 55000,
-    propagateCreateError: false,
+    // idleTimeoutMillis: 55000,
+    // propagateCreateError: false,
   },
 };
 
