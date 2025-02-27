@@ -1,5 +1,9 @@
 import express, { Router } from "express";
 
+import config from "./client/knexfile";
+import knex from "knex";
+const knexapp = knex(config);
+
 import dotenv from "dotenv";
 dotenv.config({
   path: ".env",
@@ -97,3 +101,5 @@ app.use(
   // }),
   weather
 );
+
+export { knexapp };

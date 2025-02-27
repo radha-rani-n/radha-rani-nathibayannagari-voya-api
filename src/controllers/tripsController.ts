@@ -1,11 +1,6 @@
-import express from "express";
 import { getAuth } from "@clerk/express";
-import knex from "knex";
-import config from "../client/knexfile";
 
-const router = express.Router();
-
-const knexapp = knex(config);
+import { knexapp } from "../index";
 
 type tripProps = {
   trip_name: string;

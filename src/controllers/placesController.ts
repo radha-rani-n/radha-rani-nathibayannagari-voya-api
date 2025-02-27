@@ -1,12 +1,10 @@
 import express from "express";
-const router = express.Router();
 import axios from "axios";
-import knex from "knex";
-import config from "../client/knexfile";
+
 import { getAuth } from "@clerk/express";
-import exp from "constants";
 const API_KEY = process.env.API_KEY;
-const knexapp = knex(config);
+import { knexapp } from "../index";
+
 interface SearchQueryParams {
   q: string;
   limit: number;

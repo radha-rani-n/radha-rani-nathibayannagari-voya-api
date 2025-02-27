@@ -1,8 +1,5 @@
 import OpenAI from "openai";
-import knex from "knex";
-import config from "../client/knexfile";
-
-const knexapp = knex(config);
+import { knexapp } from "../index";
 
 const openai = new OpenAI({
   apiKey: process.env["OPENAI_API_KEY"],
